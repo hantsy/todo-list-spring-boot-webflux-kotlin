@@ -48,9 +48,9 @@ jobs:
       - name: Build
         run: ./gradlew clean build -x test
 
-  unit-test:
+  test:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     needs: build
 
     steps:
@@ -73,5 +73,8 @@ jobs:
             caches/build-cache-1
           gradle-home-cache-cleanup: true
 
-      - name: Run Unit Tests
+      # The database is served by Testcontainers, which starts its own PostgreSQL container.
+      # Docker is preinstalled on the GitHub hosted runners, so neither a database service
+      # nor a "docker compose up" step is needed.
+      - name: Run Tests
         run: ./gradlew test
